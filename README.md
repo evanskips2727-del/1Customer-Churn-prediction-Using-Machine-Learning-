@@ -60,38 +60,63 @@ Verified layout across all features in the dataset:
 4. **Payment Method Obstacles:** Customers utilizing an **Electronic check** option showcase an exceptionally high likelihood of leaving compared to automated bank transfers or credit cards.
 5. **Infrastructure Upgrades:** **Fiber optic** accounts churn at a much higher frequency than older DSL hookups, displaying potential customer onboarding or service issues.
 
-### 🖼️ Complete Project Exploratory Visualizations
-
-#### Visualization 1: Churn Count by Contract Type
-![Churn by Contract Type](churn_contract_type.png)
-
-#### Visualization 2: Tenure Density Distribution by Churn
-![Tenure Density](tenure_density.png)
-
-#### Visualization 3: Monthly Charges Range vs Churn
-![Monthly Charges Range](monthly_charges_range.png)
-
-#### Visualization 4: Churn Status Across Payment Methods
-![Churn by Payment Method](churn_payment_method.png)
-
-#### Visualization 5: Churn Count by Internet Service Provider
-![Churn by Internet Service](churn_internet_service.png)
-
-#### Visualization 6: Churn Breakdown for Senior Citizens
-![Senior Citizen Churn](churn_seniors.png)
-
-#### Visualization 7: Total Charges vs Monthly Charges Scatter Plot
-![Total vs Monthly Scatter](total_vs_monthly_scatter.png)
+### 🖼️ Project Exploratory Visualizations
+* **Visualization 1: Churn Count by Contract Type**
+  ![Churn by Contract Type](churn_contract_type.png)
+* **Visualization 2: Tenure Density Distribution by Churn**
+  ![Tenure Density](tenure_density.png)
+* **Visualization 3: Monthly Charges Range vs Churn**
+  ![Monthly Charges Range](monthly_charges_range.png)
+* **Visualization 4: Churn Status Across Payment Methods**
+  ![Churn by Payment Method](churn_payment_method.png)
+* **Visualization 5: Churn Count by Internet Service Provider**
+  ![Churn by Internet Service](churn_internet_service.png)
+* **Visualization 6: Churn Breakdown for Senior Citizens**
+  ![Senior Citizen Churn](churn_seniors.png)
+* **Visualization 7: Total Charges vs Monthly Charges Scatter Plot**
+  ![Total vs Monthly Scatter](total_vs_monthly_scatter.png)
 
 ---
 
 ## ⚙️ 6. Feature Engineering Log
-To optimize future machine learning performance, three key features were designed and constructed:
+To optimize machine learning performance, three key features were designed and constructed:
 * **TenureGroup:** Binned continuous monthly tenure values into actionable business tiers (`0-1 Year`, `1-2 Years`, `2-4 Years`, `Over 4 Years`).
 * **TotalServices:** A collective integer counter mapping out the net volume of auxiliary services an account has active (combining online security, backup, streaming, tech support, etc.).
 * **CostPerMonthOfTenure:** A financial strain metric (`MonthlyCharges / (tenure + 1)`) highlighting premium pricing shocks on newer accounts.
 
-* **Final ML-Ready Preprocessed Shape:** (7043 rows, 36 columns) following target mapping and multi-class One-Hot Encoding (`pd.get_dummies`).
+* **Final ML-Ready Preprocessed Shape:** (7043 rows, 35 features) following target extraction and multi-class One-Hot Encoding (`pd.get_dummies(drop_first=True)`).
+
+---
+
+## 🤖 7. Machine Learning Model Development & Performance (Week 3)
+Three distinct classification frameworks were implemented, tested via a Stratified Train-Test split (80% training / 20% test validation), and evaluated across multiple classification vectors.
+
+### 📊 Model Comparison Overview
+
+| Classification Framework | Accuracy | Precision | Recall | F1-Score | ROC-AUC |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Logistic Regression (Baseline)** | **0.8034** | **0.6655** | 0.5214 | **0.5847** | **0.8463** |
+| **Random Forest Classifier** | 0.7906 | 0.6339 | 0.5000 | 0.5590 | 0.8250 |
+| **XGBoost Classifier** | 0.7821 | 0.6018 | **0.5294** | 0.5633 | 0.8235 |
+
+### 🔍 Technical Summary of Initial Modeling Iteration
+* **The Accuracy Trap Confirmed:** Although baseline model accuracy safely registers around **80.34%**, our critical **Recall values drop to ~50-53%**. This indicates that our baseline systems completely miss roughly half of actual customer churn anomalies due to target class bias. 
+* **Top Evaluation Performer:** The scaled **Logistic Regression** framework leads this initial round with the highest general AUC margin of **0.8463**. 
+
+### 🖼️ Model Performance Evaluation Visuals
+
+#### Receiver Operating Characteristic (ROC) Comparison Curve
+*The ROC profile visually charts true-positive versus false-positive trade-offs, showing strong early diagnostic weight convergence from our linear baseline.*
+![ROC Comparison Curve](model_comparison_roc.png)
+
+#### Confusion Matrix Profile: XGBoost
+*Granular error matrix detailing explicit tracking volumes on the test evaluation dataset.*
+![XGBoost Confusion Matrix](xgboost_confusion_matrix.png)
+
+---
+
+🔗 **Raw Dataset Source:** [Kaggle Telco Customer Churn Dataset](https://kaggle.com)
+
 
 
 
