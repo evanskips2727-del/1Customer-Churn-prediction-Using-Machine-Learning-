@@ -115,11 +115,34 @@ Three distinct classification frameworks were implemented, tested via a Stratifi
 
 ---
 
-🔗 **Raw Dataset Source:** [Kaggle Telco Customer Churn Dataset](https://kaggle.com)
+## ⚖️ 8. Handling Class Imbalance & Hyperparameter Optimization (Week 4)
 
+To eliminate the baseline majority class bias where models completely missed up to **176 actual churners**, Week 4 introduced synthetic oversampling and automated hyperparameter scaling.
 
+### Optimization Methodology
+* **Imbalance Treatment:** Synthetic Minority Over-sampling Technique (**SMOTE**) was applied to generate realistic balanced vectors within the feature space.
+* **Leakage Prevention:** SMOTE was enclosed entirely inside an `imblearn` processing pipeline to restrict synthetic oversampling exclusively to training sets during stratified cross-validation loops.
+* **Hyperparameter Selection:** Exhaustive optimization via `GridSearchCV` configured specifically to prioritize **Recall** metrics [1.33].
 
+### 📊 Optimized Model Performance Table (SMOTE + Tuning)
 
+| Optimization Framework | Accuracy | Precision | Recall (Catch Rate) | F1-Score | ROC-AUC |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Tuned Random Forest (SMOTE)** | 0.7630 | 0.5385 | 0.7487 | 0.6264 | 0.8405 |
+| **Tuned XGBoost (SMOTE) 🏆** | 0.7388 | 0.5053 | **0.7620** | 0.6077 | 0.8370 |
 
-🔗 **Raw Dataset Link:** [Kaggle Telco Customer Churn Dataset](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
+### 🔍 Optimization Insights
+* **The Strategic Trade-Off:** Optimizing for recall led to an expected decrease in precision (~50-53%). In subscription revenue economics, this is highly favorable: sending retention alerts to loyal customers represents a minor marketing cost, whereas failing to detect churners causes direct monthly revenue loss.
+* **Final Selection:** **Tuned XGBoost** is designated as our winner, catching **76.20%** of at-risk subscribers.
+  * *Best XGBoost Parameters:* `{'learning_rate': 0.05, 'max_depth': 3, 'n_estimators': 100}`
+  * *Best Random Forest Parameters:* `{'max_depth': 10, 'min_samples_split': 2, 'n_estimators': 100}`
+
+---
+
+## 📈 9. Model Interpretation & Strategic Executive Action Plan (Week 5)
+
+Structural feature importances were extracted directly from our finalized production XGBoost ensemble to isolate the primary markers driving user attrition.
+
+### 🖼️ Visualization 9: Top 10 Strongest Predictors of Customer Churn
+![Top 10 Strongest Predictors of Customer Churn](feature_importance.png)
 
